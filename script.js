@@ -413,7 +413,7 @@ canvas.addEventListener("touchstart", () => {
 
 // Theme configuration
 const themes = [
-    { name: "Classic", bg: "#000000", fg: "#FFFFFF", net: "#818181ff" },
+    { name: "Classic", bg: "#000000", fg: "#FFFFFF", net: "#5c5c5cff" },
     { name: "Retro Green", bg: "#002b00", fg: "#00ff00", net: "#005500" },
     { name: "Ocean", bg: "#001e3c", fg: "#00ffff", net: "#005577" },
     { name: "Cyberpunk", bg: "#2b002b", fg: "#ff00ff", net: "#770077" },
