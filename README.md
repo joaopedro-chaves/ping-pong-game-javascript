@@ -6,6 +6,8 @@ this project is based on tuturial from Code Explained YouTube channel: https://y
 
 Repository: https://github.com/CodeExplainedRepo/Ping-Pong-Game-JavaScript
 
+## [Run](http://joaopedro-chaves.github.io/ping-pong-game-javascript)
+
 ## Controls
 
 - **Mouse**: Move your mouse up and down to control the paddle
