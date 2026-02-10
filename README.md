@@ -12,7 +12,7 @@ Repository: https://github.com/CodeExplainedRepo/Ping-Pong-Game-JavaScript
 
 - **Mouse**: Move your mouse up and down to control the paddle
 - **Touch**: Tap and drag on the screen (mobile)
-- **Gamepad**: Use the left analog stick or D-Pad of the controller (Xbox, Playstation, and Nintendo are compatible. [If you have another console, check if it's compatible with your browser])
+- **Gamepad**: Use the left analog stick or D-Pad of the controller (Xbox, Playstation, and Nintendo are compatible. [If you have another controller, check if it's compatible with your browser])
 - **Keyboard**: Use the W/S or arrow keys to move the paddle up and down
 
 ## Objective
