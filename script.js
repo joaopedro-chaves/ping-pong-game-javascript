@@ -20,6 +20,30 @@ let upPressed = false;
 let downPressed = false;
 const PADDLE_SPEED = 8;
 
+// Add event listeners for keyboard input
+document.addEventListener("keydown", handleKeyDown);
+document.addEventListener("keyup", handleKeyUp);
+
+// Function to handle keyboard down events
+function handleKeyDown(evt) {
+    const key = evt.key.toUpperCase();
+    if (key === "W" || key === "ARROWUP") {
+        upPressed = true;
+    } else if (key === "S" || key === "ARROWDOWN") {
+        downPressed = true;
+    }
+}
+
+// Function to handle keyboard up events
+function handleKeyUp(evt) {
+    const key = evt.key.toUpperCase();
+    if (key === "W" || key === "ARROWUP") {
+        upPressed = false;
+    } else if (key === "S" || key === "ARROWDOWN") {
+        downPressed = false;
+    }
+}
+
 // Define the ball object with its properties
 const ball = {
     x: canvas.width / 2,
@@ -145,12 +169,12 @@ function controllerInput() {
     
     let moveY = 0;
 
-    // Verificar eixo analógico esquerdo (Y-axis) - primária
+    // Check left analog axis (Y-axis) - primary
     if (axes.length > 1 && Math.abs(axes[1]) > stickDeadZone) {
         moveY = axes[1] * PADDLE_SPEED;
         console.log("Stick Y:", axes[1].toFixed(2));
     }
-    // Fallback para D-Pad (buttons 12 e 13)
+    // Fallback for D-Pad (buttons 12 and 13)
     else if (buttons.length > 13) {
         if (buttons[12] && buttons[12].pressed) {
             moveY = -PADDLE_SPEED;
@@ -160,10 +184,10 @@ function controllerInput() {
             console.log("D-Pad DOWN");
         }
     }
-    // Fallback para botões de trigger (alternativos)
+    // Fallback for trigger buttons (alternative)
     else if (buttons.length > 6) {
         if (axes.length > 3) {
-            // Usar triggers analógicos se disponíveis
+            // Use analog triggers if available
             const leftTrigger = axes[2] || 0;
             const rightTrigger = axes[3] || 0;
             
@@ -175,8 +199,25 @@ function controllerInput() {
         }
     }
 
-    // Aplicar movimento
+    // Apply movement
     user.y += moveY;
+
+    // Keep the paddle within the limits.
+    if (user.y < 0) {
+        user.y = 0;
+    } else if (user.y > canvas.height - user.height) {
+        user.y = canvas.height - user.height;
+    }
+}
+
+// Function to handle keyboard input and update the user paddle's position
+function keyboardInput() {
+    if (upPressed) {
+        user.y -= PADDLE_SPEED;
+    }
+    if (downPressed) {
+        user.y += PADDLE_SPEED;
+    }
 
     // Manter paddle dentro dos limites
     if (user.y < 0) {
@@ -354,6 +395,7 @@ canvas.addEventListener("touchstart", () => {
 
 // Main game loop to update and render the game at a fixed frame rate
 function game() {
+    keyboardInput();
     controllerInput();
     update();
     render();
