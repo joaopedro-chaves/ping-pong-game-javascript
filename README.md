@@ -15,6 +15,13 @@ Repository: https://github.com/CodeExplainedRepo/Ping-Pong-Game-JavaScript
 - **Gamepad**: Use the left analog stick or D-Pad of the controller (Xbox, Playstation, and Nintendo are compatible. [If you have another controller, check if it's compatible with your browser])
 - **Keyboard**: Use the W/S or arrow keys to move the paddle up and down
 
+## How to change the theme
+
+- **Keyboard**: Press the R key to switch themes
+- **Gamepad**: Press the Triangle/Y button to switch themes
+- **Mouse**: Click on right key to switch themes
+- **Touch**: Tap two times on the screen to switch themes
+
 ## Objective
 
 Be the first to reach 11 points! The ball accelerates with each paddle hit.

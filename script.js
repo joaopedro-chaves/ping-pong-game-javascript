@@ -1,5 +1,7 @@
 // Pong Game by Code Explained
 
+//  variables ----------------
+
 // Get the canvas element and its 2D context
 const canvas = document.getElementById("pong");
 const ctx = canvas.getContext('2d');
@@ -19,30 +21,6 @@ let controllerIndex = null;
 let upPressed = false;
 let downPressed = false;
 const PADDLE_SPEED = 8;
-
-// Add event listeners for keyboard input
-document.addEventListener("keydown", handleKeyDown);
-document.addEventListener("keyup", handleKeyUp);
-
-// Function to handle keyboard down events
-function handleKeyDown(evt) {
-    const key = evt.key.toUpperCase();
-    if (key === "W" || key === "ARROWUP") {
-        upPressed = true;
-    } else if (key === "S" || key === "ARROWDOWN") {
-        downPressed = true;
-    }
-}
-
-// Function to handle keyboard up events
-function handleKeyUp(evt) {
-    const key = evt.key.toUpperCase();
-    if (key === "W" || key === "ARROWUP") {
-        upPressed = false;
-    } else if (key === "S" || key === "ARROWDOWN") {
-        downPressed = false;
-    }
-}
 
 // Define the ball object with its properties
 const ball = {
@@ -84,17 +62,7 @@ const net = {
     color: "#818181ff"
 }
 
-// Function to draw a rectangle on the canvas
-function drawRect(x, y, w, h, color) {
-    ctx.fillStyle = color;
-    ctx.fillRect(x, y, w, h);
-}
-
-// Function to draw the ball on the canvas
-function drawBall(x, y, color) {
-    ctx.fillStyle = color;
-    ctx.fillRect(x, y, 10, 10);
-}
+// functions controls ----------------
 
 // Add event listener for mouse movement to control the user paddle
 canvas.addEventListener("mousemove", getMousePos);
@@ -136,7 +104,7 @@ window.addEventListener("gamepaddisconnected", (event) => {
 function controllerInput() {
     // Try to find a connected gamepad
     const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
-    
+
     if (controllerIndex === null && gamepads.length > 0) {
         for (let i = 0; i < gamepads.length; i++) {
             if (gamepads[i]) {
@@ -152,7 +120,7 @@ function controllerInput() {
     }
 
     const gamepad = gamepads[controllerIndex];
-    
+
     // If the game is over, check if any button is pressed to restart
     if (gameOver) {
         const buttons = gamepad.buttons;
@@ -161,11 +129,11 @@ function controllerInput() {
         }
         return;
     }
-    
+
     const buttons = gamepad.buttons;
     const axes = gamepad.axes;
     const stickDeadZone = 0.3;
-    
+
     let moveY = 0;
 
     // Check left analog axis (Y-axis) - primary
@@ -186,13 +154,23 @@ function controllerInput() {
             // Use analog triggers if available
             const leftTrigger = axes[2] || 0;
             const rightTrigger = axes[3] || 0;
-            
+
             if (leftTrigger > stickDeadZone) {
                 moveY = -PADDLE_SPEED;
             } else if (rightTrigger > stickDeadZone) {
                 moveY = PADDLE_SPEED;
             }
         }
+    }
+
+    // Check for theme switch with gamepad (Button 3 - Triangle/Y)
+    if (buttons.length > 3 && buttons[3] && buttons[3].pressed) {
+        if (!lastThemeBtnState) {
+            switchTheme();
+            lastThemeBtnState = true;
+        }
+    } else {
+        lastThemeBtnState = false;
     }
 
     // Apply movement
@@ -223,12 +201,44 @@ function keyboardInput() {
     }
 }
 
-// Function to reset the ball to the center and reverse its direction
-function resetBall() {
-    ball.x = canvas.width / 2;
-    ball.y = canvas.height / 2;
-    ball.velocityX = -ball.velocityX;
-    ball.speed = 7;
+// Add event listeners for keyboard input
+document.addEventListener("keydown", handleKeyDown);
+document.addEventListener("keyup", handleKeyUp);
+
+// Function to handle keyboard down events
+function handleKeyDown(evt) {
+    const key = evt.key.toUpperCase();
+    if (key === "W" || key === "ARROWUP") {
+        upPressed = true;
+    } else if (key === "S" || key === "ARROWDOWN") {
+        downPressed = true;
+    } else if (key === "R") {
+        switchTheme();
+    }
+}
+
+// Function to handle keyboard up events
+function handleKeyUp(evt) {
+    const key = evt.key.toUpperCase();
+    if (key === "W" || key === "ARROWUP") {
+        upPressed = false;
+    } else if (key === "S" || key === "ARROWDOWN") {
+        downPressed = false;
+    }
+}
+
+// functions game ----------------
+
+// Function to draw a rectangle on the canvas
+function drawRect(x, y, w, h, color) {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, w, h);
+}
+
+// Function to draw the ball on the canvas
+function drawBall(x, y, color) {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, 10, 10);
 }
 
 // Function to draw the net on the canvas
@@ -240,9 +250,17 @@ function drawNet() {
 
 // Function to draw text on the canvas
 function drawText(text, x, y) {
-    ctx.fillStyle = "#FFF";
+    ctx.fillStyle = themes[currentThemeIndex].fg;
     ctx.font = "70px 'Silkscreen'";
     ctx.fillText(text, x, y);
+}
+
+// Function to reset the ball to the center and reverse its direction
+function resetBall() {
+    ball.x = canvas.width / 2;
+    ball.y = canvas.height / 2;
+    ball.velocityX = -ball.velocityX;
+    ball.speed = 7;
 }
 
 // Function to check for collision between the ball and a paddle
@@ -272,7 +290,7 @@ function update() {
 
     if (ball.x - ball.radius < 0) {
         com.score++;
-        scorePoint.play().catch(() => {});
+        scorePoint.play().catch(() => { });
         if (com.score === 11) {
             gameOver = true;
         } else {
@@ -280,7 +298,7 @@ function update() {
         }
     } else if (ball.x + ball.radius > canvas.width) {
         user.score++;
-        scorePoint.play().catch(() => {});
+        scorePoint.play().catch(() => { });
         if (user.score === 11) {
             gameOver = true;
         } else {
@@ -292,7 +310,7 @@ function update() {
     ball.y += ball.velocityY;
 
     // Simple AI for the computer paddle to follow the ball's y-coordinate
-    let computerSpeed = 2.8;
+    let computerSpeed = 5.5; // 10 is max speed
     let computerCenter = com.y + com.height / 2;
 
     if (computerCenter < ball.y - 10) {
@@ -312,17 +330,18 @@ function update() {
     if (ball.y - ball.radius < 0) {
         ball.y = ball.radius;
         ball.velocityY = -ball.velocityY;
-        wall.play().catch(() => {});
+        wall.play().catch(() => { });
     } else if (ball.y + ball.radius > canvas.height) {
         ball.y = canvas.height - ball.radius;
         ball.velocityY = -ball.velocityY;
-        wall.play().catch(() => {});
+        wall.play().catch(() => { });
     }
 
     let player = (ball.x + ball.radius < canvas.width / 2) ? user : com;
 
+    // collision detection
     if (collision(ball, player)) {
-        hit.play().catch(() => {});
+        hit.play().catch(() => { });
         let collidePoint = (ball.y - (player.y + player.height / 2));
         collidePoint = collidePoint / (player.height / 2);
 
@@ -345,7 +364,7 @@ function update() {
 
 // Function to render the game elements on the canvas
 function render() {
-    drawRect(0, 0, canvas.width, canvas.height, "#000");
+    drawRect(0, 0, canvas.width, canvas.height, themes[currentThemeIndex].bg);
 
     // Show scores with a blinking effect when the game is over
     let showScore = true;
@@ -354,21 +373,24 @@ function render() {
     }
 
     if (showScore) {
-        drawText(user.score, canvas.width / 4, canvas.height / 5);
-        drawText(com.score, 3 * canvas.width / 4, canvas.height / 5);
+        drawText(user.score, canvas.width / 4 - 35, canvas.height / 5);
+        drawText(com.score, 3 * canvas.width / 4 - 10, canvas.height / 5);
     }
 
     drawNet();
+
     drawRect(user.x, user.y, user.width, user.height, user.color);
+
     drawRect(com.x, com.y, com.width, com.height, com.color);
+
     drawBall(ball.x, ball.y, ball.color);
 
     // Display the game over message when the game is over
     if (gameOver) {
-        ctx.fillStyle = "#FFF";
+        ctx.fillStyle = themes[currentThemeIndex].fg;
         ctx.font = "30px 'Silkscreen'";
         let msg = user.score === 11 ? "PLAYER WIN!" : "COM WIN!";
-        ctx.fillText(msg, canvas.width / 2 - 150, canvas.height / 2 + 50);
+        ctx.fillText(msg, canvas.width / 2 - 100, canvas.height / 2);
     }
 }
 
@@ -388,6 +410,70 @@ canvas.addEventListener("mousedown", () => {
 canvas.addEventListener("touchstart", () => {
     if (gameOver) restartGame();
 });
+
+// Theme configuration
+const themes = [
+    { name: "Classic", bg: "#000000", fg: "#FFFFFF", net: "#818181ff" },
+    { name: "Retro Green", bg: "#002b00", fg: "#00ff00", net: "#005500" },
+    { name: "Ocean", bg: "#001e3c", fg: "#00ffff", net: "#005577" },
+    { name: "Cyberpunk", bg: "#2b002b", fg: "#ff00ff", net: "#770077" },
+    { name: "Coffee", bg: "#2b1a0e", fg: "#f2e8dc", net: "#5e3a1f" },
+    { name: "Solarized", bg: "#002b36", fg: "#839496", net: "#073642" },
+    { name: "Neon", bg: "#000000", fg: "#39FF14", net: "#BC13FE" },
+    { name: "P5R", bg: "#e60012", fg: "#000000", net: "#2a0003" },
+    { name: "P4G", bg: "#ffe600", fg: "#111111", net: "#e5ce00" },
+    { name: "P3R", bg: "#0024ca", fg: "#ffffff", net: "#0055ff" }
+];
+
+let currentThemeIndex = 0;
+let lastThemeBtnState = false;
+
+function applyTheme() {
+    const theme = themes[currentThemeIndex];
+    user.color = theme.fg;
+    com.color = theme.fg;
+    ball.color = theme.fg;
+    net.color = theme.net;
+
+    // Apply HTML styles
+    document.body.style.backgroundColor = theme.bg;
+    document.body.style.color = theme.fg;
+    canvas.style.borderTopColor = theme.fg;
+    canvas.style.borderBottomColor = theme.fg;
+}
+
+function switchTheme() {
+    currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+    applyTheme();
+    console.log("Switched to theme:", themes[currentThemeIndex].name);
+}
+
+// Right mouse click to switch theme
+window.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    switchTheme();
+});
+
+// Two-finger touch to switch theme
+canvas.addEventListener("touchstart", (e) => {
+    if (e.touches.length === 2) {
+        e.preventDefault();
+        switchTheme();
+    }
+}, { passive: false });
+
+// Function to debug win
+// Use it in the console to debug the game, for example: debugWin("user")
+function debugWin(player) {
+    if (player === "user") {
+        user.score = 11;
+    } else {
+        com.score = 11;
+    }
+    gameOver = true;
+}
+
+window.debugWin = debugWin;
 
 // Main game loop to update and render the game at a fixed frame rate
 function game() {
