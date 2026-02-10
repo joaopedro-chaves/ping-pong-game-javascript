@@ -141,7 +141,7 @@ function controllerInput() {
         for (let i = 0; i < gamepads.length; i++) {
             if (gamepads[i]) {
                 controllerIndex = i;
-                console.log("✓ Gamepad conectado - Índice:", i, "- ID:", gamepads[i].id);
+                console.log("Connected gamepad index: ", i, "- ID:", gamepads[i].id);
                 break;
             }
         }
@@ -157,7 +157,6 @@ function controllerInput() {
     if (gameOver) {
         const buttons = gamepad.buttons;
         if (buttons && buttons.some(btn => btn && btn.pressed)) {
-            console.log("✓ Botão pressionado - Reiniciando jogo");
             restartGame();
         }
         return;
@@ -172,16 +171,13 @@ function controllerInput() {
     // Check left analog axis (Y-axis) - primary
     if (axes.length > 1 && Math.abs(axes[1]) > stickDeadZone) {
         moveY = axes[1] * PADDLE_SPEED;
-        console.log("Stick Y:", axes[1].toFixed(2));
     }
     // Fallback for D-Pad (buttons 12 and 13)
     else if (buttons.length > 13) {
         if (buttons[12] && buttons[12].pressed) {
             moveY = -PADDLE_SPEED;
-            console.log("D-Pad UP");
         } else if (buttons[13] && buttons[13].pressed) {
             moveY = PADDLE_SPEED;
-            console.log("D-Pad DOWN");
         }
     }
     // Fallback for trigger buttons (alternative)
@@ -219,7 +215,7 @@ function keyboardInput() {
         user.y += PADDLE_SPEED;
     }
 
-    // Manter paddle dentro dos limites
+    // Limint for inside paddle
     if (user.y < 0) {
         user.y = 0;
     } else if (user.y > canvas.height - user.height) {
