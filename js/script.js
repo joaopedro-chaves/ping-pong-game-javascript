@@ -21,6 +21,7 @@ let controllerIndex = null;
 let upPressed = false;
 let downPressed = false;
 const PADDLE_SPEED = 8;
+let gameStarted = false;
 
 // Define the ball object with its properties
 const ball = {
@@ -130,6 +131,15 @@ function controllerInput() {
         return;
     }
 
+    // Logic to start the game with any gamepad button
+    if (!gameStarted) {
+        const buttons = gamepad.buttons;
+        if (buttons && buttons.some(btn => btn && btn.pressed)) {
+            startGame();
+        }
+        return;
+    }
+
     const buttons = gamepad.buttons;
     const axes = gamepad.axes;
     const stickDeadZone = 0.3;
@@ -214,6 +224,10 @@ function handleKeyDown(evt) {
         downPressed = true;
     } else if (key === "R") {
         switchTheme();
+    }
+
+    if (!gameStarted) {
+        startGame();
     }
 }
 
@@ -402,13 +416,37 @@ function restartGame() {
     setTimeout(resetBall, 1200);
 }
 
+// Function to start the game
+function startGame() {
+    if (gameStarted) return;
+    gameStarted = true;
+    const startScreen = document.getElementById("start-screen");
+    if (startScreen) {
+        startScreen.style.display = "none";
+    }
+}
+
 // Add event listeners for mouse and touch input to restart the game when it's over
 canvas.addEventListener("mousedown", () => {
-    if (gameOver) restartGame();
+    if (!gameStarted) {
+        startGame();
+    } else if (gameOver) {
+        restartGame();
+    }
 });
 
 canvas.addEventListener("touchstart", () => {
-    if (gameOver) restartGame();
+    if (!gameStarted) {
+        startGame();
+    } else if (gameOver) {
+        restartGame();
+    }
+});
+
+// Start button listener
+document.getElementById("start-btn").addEventListener("click", (e) => {
+    e.stopPropagation(); // Prevent duplicate calls if triggered by click/touch combo
+    startGame();
 });
 
 // Theme configuration
@@ -479,7 +517,9 @@ window.debugWin = debugWin;
 function game() {
     keyboardInput();
     controllerInput();
-    update();
+    if (gameStarted) {
+        update();
+    }
     render();
 }
 

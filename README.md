@@ -18,7 +18,7 @@ Repository: https://github.com/CodeExplainedRepo/Ping-Pong-Game-JavaScript
 ## How to change the theme
 
 - **Keyboard**: Press the R key to switch themes
-- **Gamepad**: Press the Triangle/Y button to switch themes
+- **Gamepad**: Press the Triangle (Playstation) / Y button (Xbox) / X button (Nintendo) to switch themes
 - **Mouse**: Click on right key to switch themes
 - **Touch**: Tap two times on the screen to switch themes
 

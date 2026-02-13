@@ -5,28 +5,22 @@
     <meta charset="UTF-8">
     <title>Ping Pong Game</title>
     <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background-color: rgb(0, 0, 0);
-            font-family: 'Silkscreen';
-        }
-
-        #pong {
-            border-top: 10px solid #FFF;
-            border-bottom: 10px solid #FFF;
-            position: absolute;
-            margin: auto;
-            top: 0;
-            right: 0;
-            left: 0;
-            bottom: 0;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <canvas id="pong" width="600" height="400"></canvas>
-    <script src="script.js"></script>
+    <div id="game-container">
+        <div id="start-screen">
+            <div id="start-box">
+                <p class="title">Ping Pong</p>
+                <p>Aperte (Teclas ou botões do controle)</p>
+                <p>ou use o botão abaixo:</p>
+                <button id="start-btn">Começar jogo</button>
+            </div>
+        </div>
+        <canvas id="pong" width="600" height="400"></canvas>
+    </div>
+    <script src="js/script.js"></script>
 </body>
 
 </html>
