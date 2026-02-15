@@ -1,10 +1,10 @@
 # Ping Pong Game
 
-A classic Ping Pong game developed in pure JavaScript with HTML5 Canvas. 
+A classic Ping Pong game developed in pure JavaScript with HTML5 Canvas.
 
-this project is based on tuturial from Code Explained YouTube channel: https://youtu.be/nl0KXCa5pJk?si=MZMqGiw_yLweEdnT
+this project is based on tuturial from Code Explained YouTube channel: [Create Ping Pong Game Using JavaScript and HTML5 | JavaScript Project For Beginners](https://youtu.be/nl0KXCa5pJk?si=MZMqGiw_yLweEdnT)
 
-Repository: https://github.com/CodeExplainedRepo/Ping-Pong-Game-JavaScript
+Repository: [Ping-Pong-Game-JavaScript on GitHub](https://github.com/CodeExplainedRepo/Ping-Pong-Game-JavaScript)
 
 ## [Run](http://joaopedro-chaves.github.io/ping-pong-game-javascript)
 
